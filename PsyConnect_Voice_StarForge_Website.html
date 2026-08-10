@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsyConnect Voice - Voice-First Mental Health Support for Students</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #0b0f14;
+            --bg-secondary: #151b23;
+            --bg-tertiary: #1f2937;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-purple: #7c3aed;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(59, 130, 246, 0.2);
+            --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            overflow-x: hidden;
+            font-weight: 400;
+        }
+
+        /* Smooth Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .slide-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(11, 15, 20, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            transition: all 0.3s ease;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gov-badge {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-left: 1rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .nav-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(124, 58, 237, 0.05) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 400;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .hero-tagline {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            font-weight: 500;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--border-accent);
+        }
+
+        .btn-sos {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+
+        /* Sections */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        /* Challenge Section */
+        .challenge {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: 1rem;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ef4444;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Vision Section */
+        .vision-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .vision-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .vision-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--border-accent);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .vision-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .vision-card h3 {
+            color: var(--accent-blue);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .vision-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Features Section */
+        .features {
+            background: var(--bg-primary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            border: 1px solid var(--border-subtle);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-cyan));
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-glow);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(124, 58, 237, 0.05));
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feature-card h3 {
+            color: var(--text-primary);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-demo {
+            color: var(--accent-cyan);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .feature-demo:hover {
+            color: var(--accent-blue);
+        }
+
+        /* Innovation Section */
+        .innovation {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+        }
+
+        .innovation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .innovation-card {
+            background: rgba(6, 182, 212, 0.05);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .innovation-card:hover {
+            transform: translateY(-8px);
+            background: rgba(6, 182, 212, 0.1);
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+
+        .innovation-card .feature-icon {
+            color: var(--accent-cyan);
+        }
+
+        .innovation-card h3 {
+            color: var(--accent-cyan);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-subtle);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+        }
+
+        .helpline {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .helpline h3 {
+            color: #ef4444;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .helpline-numbers {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .helpline-number {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(11, 15, 20, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem;
+                border-top: 1px solid var(--border-subtle);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .section {
+                padding: 4rem 1.5rem;
+            }
+
+            .features-grid,
+            .vision-grid,
+            .innovation-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        .btn:focus,
+        .nav-links a:focus {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        @media (prefers-contrast: high) {
+            :root {
+                --border-subtle: rgba(255, 255, 255, 0.3);
+                --text-secondary: #e2e8f0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div style="display: flex; align-items: center;">
+                <div class="logo">
+                    🧠 Psyconnect
+                </div>
+                <div class="gov-badge">StarForge 2026 | VoxForge</div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#challenge">Challenge</a></li>
+                <li><a href="#vision">Vision</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#innovation">Innovation</a></li>
+                <li><a href="#footer">Contact</a></li>
+            </ul>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Psyconnect</h1>
+            <p class="hero-subtitle">Multilingual Voice-First Mental Health Support Agent</p>
+            <p class="hero-tagline">for College Students • VoxForge — Voice for High Trust Workflows</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary" onclick="openModal('bookingModal')">🎯 Book Session</a>
+                <a href="#" class="btn btn-sos" onclick="openModal('sosModal')">🚨 Emergency SOS</a>
+                <a href="#features" class="btn btn-secondary">✨ Explore Features</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Challenge Section -->
+    <section id="challenge" class="section challenge">
+        <div class="section-header fade-in">
+            <h2 class="section-title">The Mental Health Challenge</h2>
+            <p class="section-subtitle">Students in higher education face unprecedented mental health challenges, particularly in regions like Jammu & Kashmir with unique socio-cultural complexities.</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card slide-up">
+                <div class="stat-number">60%</div>
+                <div class="stat-label">Students report high stress levels</div>
+            </div>
+            <div class="stat-card slide-up">
+                <div class="stat-number">40%</div>
+                <div class="stat-label">Experience anxiety disorders</div>
+            </div>
+            <div class="stat-card slide-up">
+                <div class="stat-number">25%</div>
+                <div class="stat-label">Have limited access to mental health services</div>
+            </div>
+            <div class="stat-card slide-up">
+                <div class="stat-number">80%</div>
+                <div class="stat-label">Avoid seeking help due to stigma</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section id="vision" class="section">
+        <div class="section-header fade-in">
+            <h2 class="section-title">Our Vision</h2>
+            <p class="section-subtitle">Creating an accessible, culturally sensitive, and comprehensive digital mental health ecosystem tailored for students in Jammu & Kashmir.</p>
+        </div>
+        
+        <div class="vision-grid">
+            <div class="vision-card slide-up">
+                <div class="vision-icon floating">🎯</div>
+                <h3>Accessible Care</h3>
+                <p>Breaking down barriers to mental health support through technology, making professional help available 24/7 regardless of location or circumstances.</p>
+            </div>
+            <div class="vision-card slide-up">
+                <div class="vision-icon floating">🌱</div>
+                <h3>Holistic Wellness</h3>
+                <p>Promoting complete mental, emotional, and social well-being through evidence-based interventions and personalized support systems.</p>
+            </div>
+            <div class="vision-card slide-up">
+                <div class="vision-icon floating">🤝</div>
+                <h3>Community Support</h3>
+                <p>Building supportive peer networks and connecting students with professional counselors and mental health specialists in a safe environment.</p>
+            </div>
+            <div class="vision-card slide-up">
+                <div class="vision-icon floating">🧠</div>
+                <h3>Smart Solutions</h3>
+                <p>Leveraging AI and data analytics to provide personalized mental health insights and proactive intervention strategies tailored to individual needs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Features Section -->
+    <section id="features" class="section features">
+        <div class="section-header fade-in">
+            <h2 class="section-title">Core Features</h2>
+            <p class="section-subtitle">Comprehensive tools and services designed specifically for the mental health needs of students in higher education.</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card slide-up">
+                <span class="feature-icon">🤖</span>
+                <h3>AI Mental Health Assistant</h3>
+                <p>24/7 intelligent chatbot trained in cognitive behavioral therapy techniques, providing immediate support and crisis intervention when needed.</p>
+                <div class="feature-demo" onclick="openModal('chatbotDemo')">→ Try AI Assistant Demo</div>
+            </div>
+            <div class="feature-card slide-up">
+                <span class="feature-icon">📅</span>
+                <h3>Smart Appointment Calendar</h3>
+                <p>Integrated scheduling system for therapy sessions, group meetings, and wellness activities with automated reminders and rescheduling options.</p>
+                <div class="feature-demo" onclick="openModal('bookingModal')">→ Book Appointment</div>
+            </div>
+            <div class="feature-card slide-up">
+                <span class="feature-icon">📊</span>
+                <h3>Mood Tracking & Analytics</h3>
+                <p>Advanced mood monitoring with personalized insights, pattern recognition, and wellness recommendations based on your mental health journey.</p>
+                <div class="feature-demo" onclick="openModal('moodDemo')">→ Try Mood Tracker</div>
+            </div>
+            <div class="feature-card slide-up">
+                <span class="feature-icon">🎮</span>
+                <h3>Wellness Quest Gamification</h3>
+                <p>Engaging mental health challenges, mindfulness quests, and achievement systems to make wellness activities fun and motivating.</p>
+                <div class="feature-demo" onclick="openModal('questDemo')">→ Start Wellness Quest</div>
+            </div>
+            <div class="feature-card slide-up">
+                <span class="feature-icon">👨‍⚕️</span>
+                <h3>Professional Therapy Network</h3>
+                <p>Direct access to licensed therapists, psychiatrists, and counselors through secure video consultations, messaging, and emergency support.</p>
+                <div class="feature-demo" onclick="openModal('bookingModal')">→ Connect with Therapist</div>
+            </div>
+            <div class="feature-card slide-up">
+                <span class="feature-icon">👥</span>
+                <h3>Anonymous Peer Support</h3>
+                <p>Safe, moderated online communities where students can share experiences and support each other anonymously with professional oversight.</p>
+                <div class="feature-demo" onclick="alert('Peer Support Groups - Coming Soon!')">→ Join Support Group</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Innovation Section -->
+    <section id="innovation" class="section innovation">
+        <div class="section-header fade-in">
+            <h2 class="section-title">Multilingual & Context-Aware Innovation</h2>
+            <p class="section-subtitle">Voice-first, multilingual and context-aware support designed around the needs of college students.</p>
+        </div>
+        
+        <div class="innovation-grid">
+            <div class="innovation-card slide-up">
+                <span class="feature-icon">🗣️</span>
+                <h3>Multilingual Support</h3>
+                <p>Support for Kashmiri, Dogri, Urdu, Hindi, and English with voice-first interaction and context-aware responses.</p>
+            </div>
+            <div class="innovation-card slide-up">
+                <span class="feature-icon">📡</span>
+                <h3>Offline Capabilities</h3>
+                <p>Core features work without internet connectivity, essential for remote areas with limited network coverage across the region.</p>
+            </div>
+            <div class="innovation-card slide-up">
+                <span class="feature-icon">🏥</span>
+                <h3>Local Healthcare Integration</h3>
+                <p>Seamless connection with regional hospitals, clinics, and mental health facilities for comprehensive care coordination.</p>
+            </div>
+            <div class="innovation-card slide-up">
+                <span class="feature-icon">🎭</span>
+                <h3>Cultural Sensitivity</h3>
+                <p>Therapy approaches and content adapted to local customs, traditions, and cultural values of Jammu & Kashmir communities.</p>
+            </div>
+            <div class="innovation-card slide-up">
+                <span class="feature-icon">🚨</span>
+                <h3>Crisis Response Network</h3>
+                <p>Immediate connection to local emergency services and crisis helplines with regional language support and cultural awareness.</p>
+            </div>
+            <div class="innovation-card slide-up">
+                <span class="feature-icon">📚</span>
+                <h3>Academic Institution Partnership</h3>
+                <p>Direct integration with universities and colleges for streamlined access, academic stress management, and institutional support.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">🧠 Psyconnect</div>
+            
+            <div class="helpline fade-in">
+                <h3>🚨 24/7 Mental Health Helpline</h3>
+                <div class="helpline-numbers">
+                    <div class="helpline-number">📞 National: 9152987821</div>
+                    <div class="helpline-number">📞 J&K: 0194-2440783</div>
+                    <div class="helpline-number">📧 help@psyconnect.jk.gov.in</div>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#terms">Terms of Service</a>
+                <a href="#support">Support Center</a>
+                <a href="#careers">Careers</a>
+                <a href="#contact">Contact Us</a>
+                <a href="#accessibility">Accessibility</a>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 PsyConnect Voice. All rights reserved.</p>
+                <p style="margin-top: 0.5rem;">StarForge 2026 | VoxForge — Voice for High Trust Workflows</p>
+                <p style="margin-top: 0.5rem; color: var(--text-muted);">Supporting student mental health through voice, technology, compassion, and contextual support.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('bookingModal')">&times;</button>
+            <h3 style="color: var(--accent-blue); margin-bottom: 1.5rem;">📅 Book Your Session</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Connect with licensed mental health professionals</p>
+            
+            <div style="text-align: left; margin-bottom: 2rem;">
+                <div style="margin-bottom: 1rem;">
+                    <label style="color: var(--text-primary); font-weight: 500;">Session Type:</label>
+                    <select style="width: 100%; padding: 0.75rem; margin-top: 0.5rem; background: var(--bg-tertiary); border: 1px solid var(--border-subtle); border-radius: 0.5rem; color: var(--text-primary);">
+                        <option>Individual Counseling</option>
+                        <option>Group Therapy</option>
+                        <option>Crisis Intervention</option>
+                        <option>Academic Stress Management</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="color: var(--text-primary); font-weight: 500;">Preferred Date:</label>
+                    <input type="date" style="width: 100%; padding: 0.75rem; margin-top: 0.5rem; background: var(--bg-tertiary); border: 1px solid var(--border-subtle); border-radius: 0.5rem; color: var(--text-primary);">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="color: var(--text-primary); font-weight: 500;">Language Preference:</label>
+                    <select style="width: 100%; padding: 0.75rem; margin-top: 0.5rem; background: var(--bg-tertiary); border: 1px solid var(--border-subtle); border-radius: 0.5rem; color: var(--text-primary);">
+                        <option>English</option>
+                        <option>Hindi</option>
+                        <option>Urdu</option>
+                        <option>Kashmiri</option>
+                        <option>Dogri</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-primary" onclick="alert('Booking confirmed! You will receive a confirmation email shortly.'); closeModal('bookingModal')">Book Session</button>
+                <button class="btn btn-secondary" onclick="closeModal('bookingModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SOS Modal -->
+    <div id="sosModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('sosModal')">&times;</button>
+            <h3 style="color: #ef4444; margin-bottom: 1.5rem;">🚨 Emergency Support</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Immediate help is available. You are not alone.</p>
+            
+            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 2rem;">
+                <p style="color: var(--text-primary); font-weight: 600; margin-bottom: 1rem;">Crisis Helplines:</p>
+                <div style="color: var(--text-primary);">📞 National: 9152987821</div>
+                <div style="color: var(--text-primary);">📞 J&K: 0194-2440783</div>
+                <div style="color: var(--text-primary);">📧 crisis@psyconnect.jk.gov.in</div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <button class="btn btn-sos" onclick="alert('Connecting you to crisis counselor...'); closeModal('sosModal')">🚨 Connect Now</button>
+                <button class="btn btn-primary" onclick="alert('Anonymous chat started with crisis counselor'); closeModal('sosModal')">💬 Anonymous Chat</button>
+                <button class="btn btn-secondary" onclick="closeModal('sosModal')">I'm Safe Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Demo Modal -->
+    <div id="chatbotDemo" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="modal-close" onclick="closeModal('chatbotDemo')">&times;</button>
+            <h3 style="color: var(--accent-blue); margin-bottom: 1.5rem;">🤖 AI Mental Health Assistant</h3>
+            
+            <div style="background: var(--bg-tertiary); border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem; max-height: 300px; overflow-y: auto;" id="chatMessages">
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                    <strong style="color: var(--accent-blue);">AI Assistant:</strong><br>
+                    <span style="color: var(--text-secondary);">Hello! I'm your AI mental health companion. I'm here to listen and support you 24/7. How are you feeling today?</span>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                <input type="text" id="chatInput" placeholder="Type your message..." style="flex: 1; padding: 0.75rem; background: var(--bg-tertiary); border: 1px solid var(--border-subtle); border-radius: 0.5rem; color: var(--text-primary);" onkeypress="handleChatKeypress(event)">
+                <button class="btn btn-primary" onclick="sendChatMessage()">Send</button>
+            </div>
+            
+            <div style="display: flex; flex-wrap: gap: 0.5rem;">
+                <button class="btn btn-secondary" style="font-size: 0.9rem; padding: 0.5rem 1rem;" onclick="sendQuickMessage('I feel anxious about exams')">😰 Exam anxiety</button>
+                <button class="btn btn-secondary" style="font-size: 0.9rem; padding: 0.5rem 1rem;" onclick="sendQuickMessage('I feel lonely')">😔 Feeling lonely</button>
+                <button class="btn btn-secondary" style="font-size: 0.9rem; padding: 0.5rem 1rem;" onclick="sendQuickMessage('I need motivation')">💪 Need motivation</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mood Demo Modal -->
+    <div id="moodDemo" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('moodDemo')">&times;</button>
+            <h3 style="color: var(--accent-cyan); margin-bottom: 1.5rem;">📊 Mood Tracker</h3>
+            
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">How are you feeling right now?</p>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                <div onclick="selectMood('great')" style="text-align: center; cursor: pointer; padding: 1rem; border: 2px solid transparent; border-radius: 0.75rem; transition: all 0.3s ease;" class="mood-option">
+                    <div style="font-size: 2.5rem;">😊</div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;">Great</div>
+                </div>
+                <div onclick="selectMood('good')" style="text-align: center; cursor: pointer; padding: 1rem; border: 2px solid transparent; border-radius: 0.75rem; transition: all 0.3s ease;" class="mood-option">
+                    <div style="font-size: 2.5rem;">🙂</div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;">Good</div>
+                </div>
+                <div onclick="selectMood('okay')" style="text-align: center; cursor: pointer; padding: 1rem; border: 2px solid transparent; border-radius: 0.75rem; transition: all 0.3s ease;" class="mood-option">
+                    <div style="font-size: 2.5rem;">😐</div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;">Okay</div>
+                </div>
+                <div onclick="selectMood('sad')" style="text-align: center; cursor: pointer; padding: 1rem; border: 2px solid transparent; border-radius: 0.75rem; transition: all 0.3s ease;" class="mood-option">
+                    <div style="font-size: 2.5rem;">😔</div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;">Sad</div>
+                </div>
+                <div onclick="selectMood('anxious')" style="text-align: center; cursor: pointer; padding: 1rem; border: 2px solid transparent; border-radius: 0.75rem; transition: all 0.3s ease;" class="mood-option">
+                    <div style="font-size: 2.5rem;">😰</div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;">Anxious</div>
+                </div>
+            </div>
+            
+            <div id="moodInsight" style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 2rem; display: none;">
+                <p style="color: var(--accent-cyan); font-weight: 600; margin-bottom: 0.5rem;">Mood Insight:</p>
+                <p style="color: var(--text-secondary);" id="moodAdvice"></p>
+            </div>
+            
+            <button class="btn btn-primary" onclick="saveMood()">Save Mood Entry</button>
+        </div>
+    </div>
+
+    <!-- Quest Demo Modal -->
+    <div id="questDemo" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('questDemo')">&times;</button>
+            <h3 style="color: var(--accent-purple); margin-bottom: 1.5rem;">🎮 Wellness Quest</h3>
+            
+            <div style="background: rgba(124, 58, 237, 0.1); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 0.75rem; padding: 2rem; margin-bottom: 2rem;">
+                <h4 style="color: var(--accent-purple); margin-bottom: 1rem;">Daily Mindfulness Challenge</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Complete a 5-minute breathing exercise to earn 50 wellness points!</p>
+                
+                <div style="background: var(--bg-tertiary); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: var(--text-primary);">Progress</span>
+                        <span style="color: var(--accent-purple);" id="questProgress">0/5 minutes</span>
+                    </div>
+                    <div style="background: rgba(124, 58, 237, 0.2); height: 8px; border-radius: 4px;">
+                        <div style="background: var(--accent-purple); height: 100%; width: 0%; border-radius: 4px; transition: width 0.3s ease;" id="progressBar"></div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;" id="breathingGuide">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;" id="breathingIcon">🫁</div>
+                    <p style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 1rem;" id="breathingInstruction">Click start to begin your breathing exercise</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button class="btn btn-primary" id="startQuest" onclick="startBreathingExercise()">Start Exercise</button>
+                <button class="btn btn-secondary" onclick="closeModal('questDemo')">Maybe Later</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.fade-in, .slide-up').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Mobile navigation
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            navToggle.classList.toggle('active');
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(11, 15, 20, 0.98)';
+            } else {
+                header.style.background = 'rgba(11, 15, 20, 0.95)';
+            }
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = target.offsetTop - headerHeight - 20;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile nav
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal(modal.id);
+                }
+            });
+        });
+
+        // Chatbot demo functionality
+        const chatResponses = {
+            'anxious': 'I understand you\'re feeling anxious about exams. It\'s completely normal. Try the 4-7-8 breathing technique: inhale for 4, hold for 7, exhale for 8. Would you like me to guide you through some study stress management techniques?',
+            'lonely': 'Feeling lonely can be really difficult, especially as a student. Remember that you\'re not alone in feeling this way. Consider joining our peer support groups or scheduling a session with a counselor. What activities usually help you feel more connected?',
+            'motivation': 'I hear that you need some motivation! Remember that every small step counts. Set small, achievable goals for today. What\'s one thing you can accomplish right now that will make you feel good about yourself?',
+            'default': 'I\'m here to listen and support you. Can you tell me more about what you\'re experiencing? Remember, it\'s okay to not be okay sometimes, and seeking help is a sign of strength.'
+        };
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const messagesContainer = document.getElementById('chatMessages');
+            
+            // Add user message
+            messagesContainer.innerHTML += `
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; text-align: right;">
+                    <strong style="color: var(--text-primary);">You:</strong><br>
+                    <span style="color: var(--text-secondary);">${message}</span>
+                </div>
+            `;
+
+            input.value = '';
+
+            // Simulate AI response
+            setTimeout(() => {
+                const response = getAIResponse(message);
+                messagesContainer.innerHTML += `
+                    <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                        <strong style="color: var(--accent-blue);">AI Assistant:</strong><br>
+                        <span style="color: var(--text-secondary);">${response}</span>
+                    </div>
+                `;
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 1000);
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function sendQuickMessage(message) {
+            document.getElementById('chatInput').value = message;
+            sendChatMessage();
+        }
+
+        function handleChatKeypress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        function getAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            if (lowerMessage.includes('exam') || lowerMessage.includes('anxious') || lowerMessage.includes('stress')) {
+                return chatResponses.anxious;
+            } else if (lowerMessage.includes('lonely') || lowerMessage.includes('alone') || lowerMessage.includes('friend')) {
+                return chatResponses.lonely;
+            } else if (lowerMessage.includes('motivation') || lowerMessage.includes('motivate') || lowerMessage.includes('energy')) {
+                return chatResponses.motivation;
+            } else {
+                return chatResponses.default;
+            }
+        }
+
+        // Mood tracker functionality
+        function selectMood(mood) {
+            // Remove previous selection
+            document.querySelectorAll('.mood-option').forEach(option => {
+                option.style.borderColor = 'transparent';
+                option.style.background = 'transparent';
+            });
+
+            // Select current mood
+            event.currentTarget.style.borderColor = 'var(--accent-cyan)';
+            event.currentTarget.style.background = 'rgba(6, 182, 212, 0.1)';
+
+            // Show insight
+            const insights = {
+                'great': 'Wonderful! You\'re in a positive mindset. Consider sharing this energy with others or engaging in activities you love.',
+                'good': 'That\'s great to hear! Maintain this positive momentum with some mindfulness or creative activities.',
+                'okay': 'It\'s perfectly normal to feel neutral sometimes. Consider doing something small that brings you joy.',
+                'sad': 'I\'m sorry you\'re feeling down. Remember that it\'s okay to feel this way. Consider reaching out to a friend or trying some gentle self-care.',
+                'anxious': 'Anxiety can be overwhelming. Try some deep breathing or grounding techniques. If this persists, consider speaking with a counselor.'
+            };
+
+            document.getElementById('moodInsight').style.display = 'block';
+            document.getElementById('moodAdvice').textContent = insights[mood];
+        }
+
+        function saveMood() {
+            alert('Mood entry saved! Your daily tracking helps us provide better personalized insights.');
+            closeModal('moodDemo');
+        }
+
+        // Breathing exercise functionality
+        let breathingTimer = null;
+        let breathingProgress = 0;
+
+        function startBreathingExercise() {
+            const startBtn = document.getElementById('startQuest');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('questProgress');
+            const instruction = document.getElementById('breathingInstruction');
+            const icon = document.getElementById('breathingIcon');
+
+            startBtn.textContent = 'In Progress...';
+            startBtn.disabled = true;
+
+            let seconds = 0;
+            breathingTimer = setInterval(() => {
+                seconds++;
+                breathingProgress = (seconds / 300) * 100; // 5 minutes = 300 seconds
+                progressBar.style.width = breathingProgress + '%';
+                progressText.textContent = `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')} / 5:00`;
+
+                // Breathing cycle (4-4-4-4 pattern)
+                const cyclePosition = seconds % 16;
+                if (cyclePosition <= 4) {
+                    instruction.textContent = 'Breathe in slowly...';
+                    icon.textContent = '🌬️';
+                } else if (cyclePosition <= 8) {
+                    instruction.textContent = 'Hold your breath...';
+                    icon.textContent = '⏸️';
+                } else if (cyclePosition <= 12) {
+                    instruction.textContent = 'Breathe out slowly...';
+                    icon.textContent = '💨';
+                } else {
+                    instruction.textContent = 'Hold empty...';
+                    icon.textContent = '⏸️';
+                }
+
+                if (seconds >= 300) {
+                    clearInterval(breathingTimer);
+                    instruction.textContent = 'Excellent! Quest completed! 🎉';
+                    icon.textContent = '✨';
+                    startBtn.textContent = 'Claim Reward (50 points)';
+                    startBtn.disabled = false;
+                    startBtn.onclick = () => {
+                        alert('🎉 Congratulations! You earned 50 wellness points! Keep building healthy habits.');
+                        closeModal('questDemo');
+                    };
+                }
+            }, 1000);
+        }
+
+        // Add floating animation delay to icons
+        document.querySelectorAll('.floating').forEach((el, index) => {
+            el.style.animationDelay = `${index * 0.5}s`;
+        });
+
+        // Add hover effects to cards
+        document.querySelectorAll('.feature-card, .vision-card, .innovation-card, .stat-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-12px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Accessibility: Reduced motion support
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.style.scrollBehavior = 'auto';
+            document.querySelectorAll('*').forEach(el => {
+                el.style.animationDuration = '0.001s';
+                el.style.transitionDuration = '0.001s';
+            });
+        }
+
+        // Console welcome message
+        console.log('🧠 Psyconnect: Digital Mental Health Platform for Students');
+        console.log('StarForge 2026 | VoxForge — Voice for High Trust Workflows');
+        console.log('Empowering student mental health through technology and cultural understanding');
+    </script>
+</body>
+</html>
